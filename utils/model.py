@@ -4,6 +4,7 @@ import math
 import os
 import random
 import re
+import sys
 
 from chainmap import ChainMap
 from torch.autograd import Variable
@@ -122,6 +123,8 @@ class SpeechResModel(SerializableModule):
 
 class SpeechModel(SerializableModule):
     def __init__(self, config):
+        #print(config)
+        #sys.exit(1)
         super().__init__()
         n_labels = config["n_labels"]
         n_featmaps1 = config["n_feature_maps1"]
@@ -184,6 +187,7 @@ class SpeechModel(SerializableModule):
         self.dropout = nn.Dropout(dropout_prob)
 
     def forward(self, x):
+        #print('x.shape =', x.shape)
         x = F.relu(self.conv1(x.unsqueeze(1))) # shape: (batch, channels, i1, o1)
         x = self.dropout(x)
         x = self.pool1(x)
@@ -247,7 +251,7 @@ class SpeechDataset(data.Dataset):
         config["dev_pct"] = 10
         config["test_pct"] = 10
         config["wanted_words"] = ["command", "random"]
-        config["data_folder"] = "/data/speech_dataset"
+        config["data_folder"] = "./speech_commands_v0.02"
         return config
 
     def _timeshift_audio(self, data):

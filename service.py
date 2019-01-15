@@ -78,9 +78,11 @@ class TorchLabelService(LabelService):
         self.reload()
 
     def reload(self):
-        config = model.find_config(model.ConfigType.CNN_TRAD_POOL2)
+        config = model.find_config(model.ConfigType.RES8)
+        #config = model.find_config(model.ConfigType.CNN_TRAD_POOL2)
         config["n_labels"] = len(self.labels)
-        self.model = model.SpeechModel(config)
+        self.model = model.SpeechResModel(config)
+        #self.model = model.SpeechModel(config)
         if not self.no_cuda:
             self.model.cuda()
         self.model.load(self.model_filename)
